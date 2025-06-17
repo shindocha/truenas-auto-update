@@ -9,6 +9,7 @@ Yes, I know what you're thinking - "You shouldn't auto-update your TrueNAS apps!
 - `CRON_SCHEDULE` (_optional_): Cron schedule for when to check for updates (e.g., `0 4 * * *` for daily at 4 AM). If not set, the script will run once and then exit.
 - `APPRISE_URLS` (_optional_): Apprise URLs to send notifications to (e.g., `https://example.com/apprise,https://example.com/apprise2`) More info on [Apprise](https://github.com/caronc/apprise)
 - `NOTIFY_ON_SUCCESS` (_optional_): Set to "true" to receive notifications when apps are successfully updated (default: "false")
+- `ONLY_UPDATE_STARTED_APPS` (_optional_): Set to "true" to only update apps that are currently running/powered-on (default: "false"). This helps avoid unnecessary updates for apps that are stopped.
 - `EXCLUDE_APPS` (_optional_): Comma-separated list of app names to skip during updates (e.g., `app1,app2`). This is useful if you want to exclude certain apps from being updated automatically.
 - `INCLUDE_APPS` (_optional_): Comma-separated list of app names to include during updates (e.g., `app1,app2`). This is useful if you want to only update certain apps and skip the rest.
 
@@ -34,6 +35,7 @@ docker run --name truenas-auto-update \
          -e CRON_SCHEDULE="0 4 * * *" \
          -e APPRISE_URLS="https://example.com/apprise,https://example.com/apprise2" \
          -e NOTIFY_ON_SUCCESS="true" \
+         -e ONLY_UPDATE_STARTED_APPS="true" \
          ghcr.io/marvinvr/truenas-auto-update
 ```
 

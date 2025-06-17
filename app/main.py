@@ -12,6 +12,7 @@ BASE_URL = os.getenv("BASE_URL")
 API_KEY = os.getenv("API_KEY")
 APPRISE_URLS = os.getenv("APPRISE_URLS", "").strip()
 NOTIFY_ON_SUCCESS = os.getenv("NOTIFY_ON_SUCCESS", "false").lower() == "true"
+ONLY_UPDATE_STARTED_APPS = os.getenv("ONLY_UPDATE_STARTED_APPS", "false").lower() == "true"
 EXCLUDE_APPS = [app.strip() for app in os.getenv("EXCLUDE_APPS", "").strip().split(",") if app.strip()]
 INCLUDE_APPS = [app.strip() for app in os.getenv("INCLUDE_APPS", "").strip().split(",") if app.strip()]
 
@@ -84,6 +85,9 @@ for app in apps_with_upgrade:
         continue
     if INCLUDE_APPS and app["name"] not in INCLUDE_APPS:
         logger.info(f"Skipping upgrade for: {app['name']} (APP not in INCLUDE_APPS)")
+        continue
+    if ONLY_UPDATE_STARTED_APPS and app.get("state", "").upper() != "RUNNING":
+        logger.info(f"Skipping upgrade for: {app['name']} (APP not running, state: {app.get('state', 'unknown')})")
         continue
         
     logger.info(f"Upgrading {app['name']}...")
